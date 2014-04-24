@@ -26,6 +26,7 @@ def main():
     lineint = params.get("line", "intensity").split(",")
     linewidth = params.getfloat("line", "width") 
     frequency = params.getfloat("line", "frequency")
+    vlsr = params.getfloat("line", "vlsr")
     npix = params.getint("cube", "npix")
     pixsize = params.getfloat("cube", "pixsize")
     nchan = params.getint("cube", "nchan")
@@ -37,7 +38,7 @@ def main():
     ra_offset = (arange(npix) - npix / 2) * pixsize
     dec_offset = ra_offset
     ra_grid, dec_grid = meshgrid(ra_offset, dec_offset)
-    veloc = (arange(nchan) - nchan / 2) * chanwidth
+    veloc = (arange(nchan) - nchan / 2) * chanwidth + vlsr
     
     # Convert the projected coordinates to cylindrical coordinates in the plane of the disk
     
@@ -70,6 +71,7 @@ def main():
     mask = r != 0
     vproj[mask] = sin(incl) * sin(theta[mask]) * sqrt(G * mstar * M_sun / (r[mask] * au))
     vproj *= 1e-3 # m/s -> km/s
+    vproj[mask] += vlsr
 
     # Compute the synthetic datacube
     
@@ -95,7 +97,7 @@ def main():
     hdr["CRPIX3"] = nchan / 2.
     hdr["CRVAL1"] = 0.
     hdr["CRVAL2"] = 0.
-    hdr["CRVAL3"] = 0.
+    hdr["CRVAL3"] = vlsr * 1e3
     hdr["BUNIT"] = "K"
     hdr["RESTFREQ"] = frequency*1e9
     hdu.writeto("%s.fits" % fitsname, clobber = True)
