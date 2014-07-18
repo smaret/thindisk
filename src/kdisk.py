@@ -35,10 +35,10 @@ def main():
 
     # Compute the initial grid
 
-    ra_offset = (arange(npix) - npix / 2) * pixsize
+    ra_offset = (arange(npix) - (npix - 1) / 2) * pixsize
     dec_offset = ra_offset
     ra_grid, dec_grid = meshgrid(ra_offset, dec_offset)
-    veloc = (arange(nchan) - nchan / 2) * chanwidth + vlsr
+    veloc = (arange(nchan) - (nchan - 1) / 2) * chanwidth + vlsr
     
     # Convert the projected coordinates to cylindrical coordinates in the plane of the disk
     
@@ -92,14 +92,15 @@ def main():
     hdr["CDELT1"] = -pixsize / 3600.
     hdr["CDELT2"] = pixsize / 3600.
     hdr["CDELT3"] = chanwidth * 1e3
-    hdr["CRPIX1"] = npix / 2.
-    hdr["CRPIX2"] = npix / 2.
-    hdr["CRPIX3"] = nchan / 2.
+    hdr["CRPIX1"] = (npix - 1) / 2. + 1  # Fortran indexing
+    hdr["CRPIX2"] = (npix - 1) / 2. + 1
+    hdr["CRPIX3"] = (nchan - 1) / 2. + 1
     hdr["CRVAL1"] = 0.
     hdr["CRVAL2"] = 0.
     hdr["CRVAL3"] = vlsr * 1e3
     hdr["BUNIT"] = "K"
-    hdr["RESTFREQ"] = frequency*1e9
+    hdr["RESTFREQ"] = frequency*1e6
+    hdr["VELO-LSR"] = vlsr * 1e3
     hdu.writeto("%s.fits" % fitsname, clobber = True)
 
 if __name__ == '__main__':
