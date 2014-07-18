@@ -42,7 +42,7 @@ def main():
     
     # Convert the projected coordinates to cylindrical coordinates in the plane of the disk
     
-    theta = zeros((npix, npix))
+    theta = zeros((npix, npix)) # theta = 0 along the l.o.s.
     r = zeros((npix, npix))
     mask = dec_grid != 0
     incl *= pi / 180. # degrees -> rad
@@ -69,7 +69,7 @@ def main():
 
     vproj = zeros((npix, npix))
     mask = r != 0
-    vproj[mask] = sin(incl) * sin(theta[mask]) * sqrt(G * mstar * M_sun / (r[mask] * au))
+    vproj[mask] = sin(incl) * cos(theta[mask]) * sqrt(G * mstar * M_sun / (r[mask] * au))
     vproj *= 1e-3 # m/s -> km/s
     vproj[mask] += vlsr
 
