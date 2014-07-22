@@ -22,6 +22,7 @@ def main():
     mstar = params.getfloat("disk", "mstar")
     size = params.getfloat("disk", "size")
     incl = params.getfloat("disk", "incl")
+    pa = params.getfloat("disk", "pa")
     dist = params.getint("disk", "dist")
     lineint = params.get("line", "intensity").split(",")
     linewidth = params.getfloat("line", "width") 
@@ -39,17 +40,20 @@ def main():
     dec_offset = ra_offset
     ra_grid, dec_grid = meshgrid(ra_offset, dec_offset)
     veloc = (arange(nchan) - (nchan - 1) / 2) * chanwidth + vlsr
-    
+
     # Convert the projected coordinates to cylindrical coordinates in the plane of the disk
-    
+
+    pa *= pi / 180. # degrees -> rad
+    x_grid = (-ra_grid * cos(pa - pi/2) - dec_grid * sin(pa - pi/2)) # disk major axis
+    y_grid = (-ra_grid * sin(pa - pi/2) + dec_grid * cos(pa - pi/2)) # disk minor axis
     theta = zeros((npix, npix)) # theta = 0 along the l.o.s.
     r = zeros((npix, npix))
-    mask = dec_grid != 0
+    mask = y_grid != 0
     incl *= pi / 180. # degrees -> rad
-    theta[mask] = 2 * arctan((dec_grid[mask] / cos(incl)) \
-                             / (-ra_grid[mask] \
-                                + sqrt(ra_grid[mask]**2 + (dec_grid[mask] / cos(incl))**2)))
-    r = sqrt(ra_grid**2 + (dec_grid / cos(incl))**2) * dist # AU
+    theta[mask] = 2 * arctan((y_grid[mask] / cos(incl)) \
+                             / (x_grid[mask] \
+                                + sqrt(x_grid[mask]**2 + (y_grid[mask] / cos(incl))**2)))
+    r = sqrt(x_grid**2 + (y_grid / cos(incl))**2) * dist # AU
 
     # Compute the line peak intensity
 
