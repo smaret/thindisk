@@ -79,9 +79,11 @@ def main():
 
     # Compute the synthetic datacube
     
+    sigma = zeros((npix, npix)) # local linewidth (FWHM/sqrt(8*ln(2))
+    sigma[mask] = linewidth * sqrt(G * mstar * M_sun / (r[mask] * au))
+    sigma *= 1e-3 # m/s -> km/s
     intensity = zeros((nchan, npix, npix))
-    sigma = linewidth / (2 * sqrt(2 * log(2)))
-    intensity = peakint[newaxis,:,:] *  exp(-(veloc[:,newaxis,newaxis] - vproj)**2 / (2 * sigma**2))
+    intensity = peakint[newaxis,:,:] * exp(-(veloc[:,newaxis,newaxis]- vproj)**2 / (2 * sigma**2)) # Fixme: singularity at (0,0) !
 
     # Export the datacube to FITS
     
