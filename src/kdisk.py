@@ -20,6 +20,7 @@ def main():
     params.read(args.parfile)
 
     mstar = params.getfloat("disk", "mstar")
+    r0 = params.getfloat("disk", "r0") # radius of the centrifugal barrier
     size = params.getfloat("disk", "size")
     incl = params.getfloat("disk", "incl")
     pa = params.getfloat("disk", "pa")
@@ -69,16 +70,24 @@ def main():
     if size != 0:
         peakint[r > size] = 0.
 
-    # Compute the projection of the Keplerian velocity along the line of sight
+    # Compute the projection of the disk velocity along the line of sight
 
+    vr = zeros((npix, npix))
+    vtheta = zeros((npix, npix))
     vproj = zeros((npix, npix))
-    mask = r != 0
-    vproj[mask] = sin(incl) * cos(theta[mask]) * sqrt(G * mstar * M_sun / (r[mask] * au))
+    mask = r >= r0
+    vr[mask] = sqrt(2 * G * mstar * M_sun / (r[mask] * au) - (2 * G * mstar * M_sun * r0 * au) / (r[mask] * au)**2)
+    vtheta[mask] = sqrt(2 * G * mstar * M_sun * r0 * au) / (r[mask] * au)
+    mask = (r < r0) * (r != 0)
+    vtheta[mask] = sqrt((G * mstar * M_sun) / (r[mask] * au)) # assume Keplerian rotation within r0
+    mask = r !=0
+    vproj[mask] = sin(incl) * (sin(theta[mask]) * vr[mask] + cos(theta[mask]) * vtheta[mask])
     vproj *= 1e-3 # m/s -> km/s
-    vproj[mask] += vlsr
+    vproj += vlsr
 
     # Compute the synthetic datacube
     
+    mask = r != 0
     sigma = zeros((npix, npix)) # local linewidth (FWHM/sqrt(8*ln(2))
     sigma[mask] = linewidth * sqrt(G * mstar * M_sun / (r[mask] * au))
     sigma *= 1e-3 # m/s -> km/s
