@@ -75,11 +75,11 @@ def main():
     vr = zeros((npix, npix))
     vtheta = zeros((npix, npix))
     vproj = zeros((npix, npix))
-    mask = r >= r0
+    mask = r >= 2 * r0
     vr[mask] = sqrt(2 * G * mstar * M_sun / (r[mask] * au) - (2 * G * mstar * M_sun * r0 * au) / (r[mask] * au)**2)
     vtheta[mask] = sqrt(2 * G * mstar * M_sun * r0 * au) / (r[mask] * au)
-    mask = (r < r0) * (r != 0)
-    vtheta[mask] = sqrt((G * mstar * M_sun) / (r[mask] * au)) # assume Keplerian rotation within r0
+    mask = (r < 2 * r0) * (r != 0)
+    vtheta[mask] = sqrt((G * mstar * M_sun) / (r[mask] * au)) # assume Keplerian rotation within 2 * r0
     mask = r !=0
     vproj[mask] = sin(incl) * (sin(theta[mask]) * vr[mask] + cos(theta[mask]) * vtheta[mask])
     vproj *= 1e-3 # m/s -> km/s
