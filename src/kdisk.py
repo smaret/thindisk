@@ -20,7 +20,7 @@ def main():
     params.read(args.parfile)
 
     mstar = params.getfloat("disk", "mstar")
-    r0 = params.getfloat("disk", "r0") # radius of the centrifugal barrier
+    rc = params.getfloat("disk", "rc") # centrifugal radius
     size = params.getfloat("disk", "size")
     incl = params.getfloat("disk", "incl")
     pa = params.getfloat("disk", "pa")
@@ -75,11 +75,11 @@ def main():
     vr = zeros((npix, npix))
     vtheta = zeros((npix, npix))
     vproj = zeros((npix, npix))
-    mask = r >= 2 * r0
-    vr[mask] = sqrt(2 * G * mstar * M_sun / (r[mask] * au) - (2 * G * mstar * M_sun * r0 * au) / (r[mask] * au)**2)
-    vtheta[mask] = sqrt(2 * G * mstar * M_sun * r0 * au) / (r[mask] * au)
-    mask = (r < 2 * r0) * (r != 0)
-    vtheta[mask] = sqrt((G * mstar * M_sun) / (r[mask] * au)) # assume Keplerian rotation within 2 * r0
+    mask = r >= rc
+    vr[mask] = sqrt(2 * G * mstar * M_sun / (r[mask] * au) - (G * mstar * M_sun * rc * au) / (r[mask] * au)**2)
+    vtheta[mask] = sqrt(G * mstar * M_sun * rc * au) / (r[mask] * au)
+    mask = (r < rc) * (r != 0)
+    vtheta[mask] = sqrt((G * mstar * M_sun) / (r[mask] * au)) # assume Keplerian rotation within rc
     mask = r !=0
     vproj[mask] = sin(incl) * (sin(theta[mask]) * vr[mask] + cos(theta[mask]) * vtheta[mask])
     vproj *= 1e-3 # m/s -> km/s
