@@ -63,10 +63,14 @@ def main():
         int_r1, r1, int_expn = map(lambda x: float(x), lineint[1:4]) 
         mask = r != 0
         peakint[mask] = int_r1 * pow(r[mask] / r1, int_expn)
-    else:
+    elif lineint[0] == "gaussian":
         int0, fwhm = map(lambda x: float(x), lineint[1:3])
         sigma = fwhm / (2 * sqrt(2 * log(2)))
         peakint = int0 * exp(-r / (2 * sigma**2) / dist)
+    else:
+        int_ring, r1, r2 = map(lambda x: float(x), lineint[1:4]) # ring
+        mask = (r > r1) * (r < r2)
+        peakint[mask] = int_ring
     if size != 0:
         peakint[r > size] = 0.
 
