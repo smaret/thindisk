@@ -26,7 +26,7 @@ def main():
     pa = params.getfloat("disk", "pa")
     dist = params.getint("disk", "dist")
     lineint = params.get("line", "intensity").split(",")
-    linewidth = params.getfloat("line", "width") 
+    linewidth = params.get("line", "width")
     frequency = params.getfloat("line", "frequency")
     vlsr = params.getfloat("line", "vlsr")
     npix = params.getint("cube", "npix")
@@ -93,8 +93,12 @@ def main():
     
     mask = r != 0
     sigma = zeros((npix, npix)) # local linewidth (FWHM/sqrt(8*ln(2))
-    sigma[mask] = linewidth * sqrt(G * mstar * M_sun / (r[mask] * au))
-    sigma *= 1e-3 # m/s -> km/s
+    if "*vkep" in linewidth:
+        linewidth = float(linewidth.split("*vkep", 2)[0])
+        sigma[mask] = linewidth * sqrt(G * mstar * M_sun / (r[mask] * au)) # fraction of the Keplerian velocity
+        sigma *= 1e-3 # m/s -> km/s
+    else:
+        sigma = float(linewidth) # km/s
     intensity = zeros((nchan, npix, npix))
     intensity = peakint[newaxis,:,:] * exp(-(veloc[:,newaxis,newaxis]- vproj)**2 / (2 * sigma**2)) # Fixme: singularity at (0,0) !
 

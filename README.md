@@ -63,7 +63,8 @@ Parameters
   the radius `r1` (in arcsecs), and `int_expn` is the powerlaw
   exponent. For a ring, set to `ring,int_ring,r1,r2`, where `int_ring`
   is the intensity between radii `r1` and `r2` (in arcsecs).
-- `width`: line width, in km/s
+- `width`: line width, in km/s. To set the linewidth to a fraction of
+  the Keplerian velocity, use e.g. `0.1*vkep`
 - `vlsr`: source systemic velocity in the LSR, in km/s
 - `name`: base name of the output FITS file
 
