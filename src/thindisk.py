@@ -1,4 +1,4 @@
-# kdisk.py --- Compute a synthetic datacube for a Keplerian disk
+# thindisk.py --- Compute a synthetic datacube for thin disk
 
 import argparse
 import configparser
@@ -10,7 +10,7 @@ def main():
 
     # Read options and arguments
 
-    parser = argparse.ArgumentParser(description = "Compute a synthetic datacube for a Keplerian disk")
+    parser = argparse.ArgumentParser(description = "Compute a synthetic datacube for a thin disk")
     parser.add_argument("parfile", help = "parameter file")
     args = parser.parse_args()
     

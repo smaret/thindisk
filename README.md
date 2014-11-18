@@ -1,10 +1,10 @@
-Kdisk
-=====
+Thindisk
+========
 
-`kdisk` is a simple Python program to compute the line emission from a
-geometrically thin and optically thick protoplanetary disk. It creates
-a datacube in FITS format that can be processed in a data reduction
-package (such as GILDAS) to produce synthetic images and
+`thindisk` is a simple Python program to compute the line emission
+from a geometrically thin and optically thick protoplanetary disk. It
+creates a datacube in FITS format that can be processed in a data
+reduction package (such as GILDAS) to produce synthetic images and
 visibilities. These synthetic data can be compared with observations
 to determine the properties (e.g. central mass or inclination) of an
 observed disk.
@@ -71,7 +71,7 @@ Usage
 -----
 
 ```
-% python kdisk.py input.ini`
+% python thindisk.py input.ini`
 ```
 
 where `input.ini` is the name of the output file.
