@@ -74,16 +74,19 @@ def main():
     if size != 0:
         peakint[r > size] = 0.
 
-    # Compute the projection of the disk velocity along the line of sight
+    # Compute the disk velocity 
 
     vr = zeros((npix, npix))
     vtheta = zeros((npix, npix))
-    vproj = zeros((npix, npix))
     mask = r >= rc
     vr[mask] = sqrt(2 * G * mstar * M_sun / (r[mask] * au) - (G * mstar * M_sun * rc * au) / (r[mask] * au)**2)
     vtheta[mask] = sqrt(G * mstar * M_sun * rc * au) / (r[mask] * au)
     mask = (r < rc) * (r != 0)
     vtheta[mask] = sqrt((G * mstar * M_sun) / (r[mask] * au)) # assume Keplerian rotation within rc
+
+    # Compute its projection along the line of sight
+
+    vproj = zeros((npix, npix))
     mask = r !=0
     vproj[mask] = sin(incl) * (sin(theta[mask]) * vr[mask] + cos(theta[mask]) * vtheta[mask])
     vproj *= 1e-3 # m/s -> km/s
