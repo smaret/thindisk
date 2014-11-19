@@ -2,16 +2,15 @@ Thindisk
 ========
 
 `thindisk` is a simple Python program to compute the line emission
-from a geometrically thin and optically thick protoplanetary disk. It
-creates a datacube in FITS format that can be processed in a data
-reduction package (such as GILDAS) to produce synthetic images and
-visibilities. These synthetic data can be compared with observations
-to determine the properties (e.g. central mass or inclination) of an
-observed disk.
+from a geometrically thin protoplanetary disk. It creates a datacube
+in FITS format that can be processed in a data reduction package (such
+as GILDAS) to produce synthetic images and visibilities. These
+synthetic data can be compared with observations to determine the
+properties (e.g. central mass or inclination) of an observed disk.
 
 The disk is assumed to be in Keplerian rotation a radius lower than
 the centrifugal radius (which can be set to a large value, for a
-purely Keplerian disk), and in infall plus rotation beyond the
+purely Keplerian disk), and in infall with rotation beyond the
 centrifugal radius.
 
 Input file
