@@ -19,21 +19,21 @@ def main():
     params = configparser.ConfigParser()
     params.read(args.parfile)
 
-    mstar = params.getfloat("disk", "mstar")
-    rc = params.getfloat("disk", "rc") # centrifugal radius
-    size = params.getfloat("disk", "size")
-    incl = params.getfloat("disk", "incl")
-    pa = params.getfloat("disk", "pa")
-    dist = params.getint("disk", "dist")
+    mstar = params.getfloat("disk", "mstar", fallback = None)
+    rc = params.getfloat("disk", "rc", fallback = 1e4)
+    size = params.getfloat("disk", "size", fallback = None)
+    incl = params.getfloat("disk", "incl", fallback = 45.0)
+    pa = params.getfloat("disk", "pa", fallback = 0.0)
+    dist = params.getint("disk", "dist", fallback = None)
     lineint = params.get("line", "intensity").split(",")
-    linewidth = params.get("line", "width")
-    frequency = params.getfloat("line", "frequency")
-    vlsr = params.getfloat("line", "vlsr")
-    npix = params.getint("cube", "npix")
-    pixsize = params.getfloat("cube", "pixsize")
-    nchan = params.getint("cube", "nchan")
-    chanwidth = params.getfloat("cube", "chanwidth")
-    fitsname = params.get("output", "name")
+    linewidth = params.get("line", "width", fallback = None)
+    frequency = params.getfloat("line", "frequency", fallback = None)
+    vlsr = params.getfloat("line", "vlsr", fallback = 0)
+    npix = params.getint("cube", "npix", fallback = 512)
+    pixsize = params.getfloat("cube", "pixsize", fallback = 0.1)
+    nchan = params.getint("cube", "nchan", fallback = 128)
+    chanwidth = params.getfloat("cube", "chanwidth", fallback = 0.1)
+    fitsname = params.get("output", "name", fallback = "output.fits")
 
     # Compute the initial grid
 
@@ -71,7 +71,7 @@ def main():
         int_ring, r1, r2 = map(lambda x: float(x), lineint[1:4]) # ring
         mask = (r > r1) * (r < r2)
         peakint[mask] = int_ring
-    if size != 0:
+    if size:
         peakint[r > size] = 0.
 
     # Compute the disk velocity 
