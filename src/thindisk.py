@@ -127,7 +127,7 @@ def main():
     hdr["BUNIT"] = "K"
     hdr["RESTFREQ"] = frequency*1e6
     hdr["VELO-LSR"] = vlsr * 1e3
-    hdu.writeto("%s.fits" % fitsname, clobber = True)
+    hdu.writeto("%s.fits" % fitsname, overwrite = True)
 
 if __name__ == '__main__':
     main()
