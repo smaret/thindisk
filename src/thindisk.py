@@ -67,10 +67,15 @@ def main():
         int0, fwhm = map(lambda x: float(x), lineint[1:3])
         sigma = fwhm / (2 * sqrt(2 * log(2)))
         peakint = int0 * exp(-r / (2 * sigma**2) / dist)
-    else:
-        int_ring, r1, r2 = map(lambda x: float(x), lineint[1:4]) # ring
+    elif lineint[0] == "ring":
+        int_ring, r1, r2 = map(lambda x: float(x), lineint[1:4])
         mask = ((r / dist) > r1) * ((r / dist) < r2)
         peakint[mask] = int_ring
+    else:
+        int_r1, r1, int_expn = map(lambda x: float(x), lineint[1:4])  # tapered powerlaw
+        mask = r != 0
+        peakint[mask] = int_r1 * pow(r[mask] / dist / r1, -int_expn) \
+            * exp(-1. * pow(r[mask] / dist / r1, 2-int_expn))
     if size:
         peakint[r > size] = 0.
 
