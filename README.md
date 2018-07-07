@@ -62,7 +62,7 @@ Parameters
   the radius `r1` (in arcsecs), and `int_expn` is the powerlaw
   exponent. For a ring, set to `ring,int_ring,r1,r2`, where `int_ring`
   is the intensity between radii `r1` and `r2` (in arcsecs). For a
-  tapered power-law (Andrew et al., Apj 700, 1502, 2009, Eq. 4), set
+  tapered power-law [(Andrew et al., Apj 700, 1502, 2009, Eq. 4)](https://doi.org/10.1088/0004-637X/700/2/1502), set
   to `tapered_powerlaw,int_r1,r1,int_expn`, where `int_r1` is a
   normalization factor, `r1` is a characteristic radius (in arcsecs)
   and `int_expn` is the power-law exponent.
