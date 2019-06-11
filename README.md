@@ -83,6 +83,7 @@ where `input.ini` is the name of the output file.
 Citation
 --------
 
-If you use this code in a scientific publication, please it using this DOI:
+If you use this code in a scientific publication, please cite it using
+this DOI:
 
-[![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.13823.svg)](http://dx.doi.org/10.5281/zenodo.13823)
+[![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.592492.svg)](http://dx.doi.org/10.5281/zenodo.592492)
